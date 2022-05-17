@@ -10,12 +10,10 @@ import json as json
 import matplotlib.pyplot as plt
 from pandas.plotting import table 
 import dataframe_image as dfi
-from pandas_profiling import ProfileReport
+# from pandas_profiling import ProfileReport
 
-['GB1':"England", 'IT1':'Italia', 'ES1':'Spain', 'L1':'Germany', 'FR1':'France', 'PO1':'Poland', 
- 'RU1':'Russia', 'NL1':, 'TR1',
-       'BE1', 'UKR1', 'GR1', 'A1', 'C1', 'SC1', 'KR1', 'TS1', 'PL1',
-       'DK1', 'RO1', 'SER1', 'SE1', 'NO1', 'UNG1', 'ZYP1']
+short_leagues = {'GB1':"England", 'IT1':'Italia', 'ES1':'Spain', 'L1':'Germany', 'FR1':'France', 'PO1':'Poland', 'RU1':'Russia'}
+                 # 'NL1':, 'TR1', 'BE1', 'UKR1', 'GR1', 'A1', 'C1', 'SC1', 'KR1', 'TS1', 'PL1', 'DK1', 'RO1', 'SER1', 'SE1', 'NO1', 'UNG1', 'ZYP1']
 
 def league_performance_preprocess(json_file, feather_file):
     with open(json_file) as data_file:
@@ -99,13 +97,13 @@ def plot_leagues_performance_by_ages(df_, leagues):
         plt.xticks(list(u23.keys()), rotation=70)
         ax.legend(bbox_to_anchor=(1, 1), loc='upper left', fontsize=20)
 
-leagues = df0['league'].unique()
-league_dict = {}
-for league in leagues:
-    league_dict[league] = df0[df['league'] == league].country.mode()[0]
-short_leagues = {long:short for short,long in league_dict.items()}
+# leagues = df0['league'].unique()
+# league_dict = {}
+# for league in leagues:
+#     league_dict[league] = df0[df['league'] == league].country.mode()[0]
+# short_leagues = {long:short for short,long in league_dict.items()}
 
-plot_leagues_performance_by_ages(df, ["Russia","England"])
+# plot_leagues_performance_by_ages(df, ["Russia","England"])
 
 def plot_debut_ages(feather_file, country='Russia'):
     df = pd.read_feather(feather_file)
@@ -133,12 +131,22 @@ def table_to_image(df):
     ax = plt.subplot(111, frame_on=False) # no visible frame
     ax.xaxis.set_visible(False)  # hide the x axis
     ax.yaxis.set_visible(False)  # hide the y axis
-    table(ax, yo[['name','debut']])  # where df is your data frame
-    s = yo.style.hide_index()
-    dfi.export(s,"img.png")
+    # table(ax, yo[['name','debut']])  # where df is your data frame
+    # s = yo.style.hide_index()
+    # dfi.export(s,"img.png")
 
-df0 = df
-leagues = df0['league'].unique()
-league_dict = {}
-for league in leagues:
-    league_dict[league] = df0[df['league'] == league].country.mode()[0]
+# df0 = df
+# leagues = df0['league'].unique()
+# league_dict = {}
+# for league in leagues:
+#     league_dict[league] = df0[df['league'] == league].country.mode()[0]
+
+json_file = "from_pfl_1.json"
+feather_file = "from_pfl_1.fea"
+def pfl_preprocess(json_file, feather_file):
+    with open(json_file) as data_file:
+        data = json.load(data_file)
+    df = pd.json_normalize(data)
+    df.reset_index().to_feather(feather_file)
+
+    df

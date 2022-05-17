@@ -60,7 +60,7 @@ dict_seasons = { '80/81' : 1980,
                }
 
 def sleep_pause():
-    time.sleep(random.uniform(.5,1))
+    time.sleep(random.uniform(.3,1))
 
 def get_soup(url_):
     """Makes an http request and returns the html as BeautifulSoup."""
@@ -77,7 +77,7 @@ def get_soup(url_):
         print(e)
         print("Failed with input url: " + url)
 
-    return BeautifulSoup(response.content, 'lxml')
+    return BeautifulSoup(response.content, 'html5lib')
 
 def datetime_from_tm(date):
     if not date: return datetime.datetime()
