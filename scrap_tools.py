@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 import time
 import random
 import datetime
+import json
+import pandas as pd
 
 ## Season
 dict_seasons = { '80/81' : 1980,
@@ -95,4 +97,11 @@ def date_fix(date_raw):
     else:
         warnings.warn(f"Can't parse date: '{date_raw}'")
         return ""
+    
+def json_to_csv(file_name):
+    with open(f"{file_name}.json") as data_file:
+        data = json.load(data_file)
+    df = pd.json_normalize(data)
+    df.reset_index().to_csv(f"{file_name}.csv")
+    
 
