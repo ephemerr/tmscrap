@@ -1,6 +1,7 @@
 import scrap_tools as tools
 import warnings
 import functools
+import re
 
 def page_parser(func):
     @functools.wraps(func)
@@ -129,9 +130,24 @@ def career_detailed_stats_parser(row):
     res['time'] = tds[8].text
     return res
 
-def parse_players_transfers(player):
+def transfers_parser(row):
+    res = {}
+    cells = row.find_all("div")
+    res['year'] = cells[0].text
+    res['date'] = cells[1].text
+    res['from_club_name'] = cells[2].text
+    res['from_club_link'] = cells[2].a['href']
+    res['to_club_name'] = cells[3].text
+    res['to_club_link'] = cells[3].a['href']
+    res['market_value'] = cells[4].text
+    res['fee'] = cells[5].text
+    return {k: v.strip() for k, v in res.items()}
+
+
+def player_profile_parser(player):
     player = "/tomas-vaclik/profil/spieler/64000"
     player = "/yusuf-yazici/profil/spieler/386726"
+    player = "/artem-ntumba-muamba/profil/spieler/558688"
     pageSoup = tools.get_soup(player)    
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
     tds = items.div.find_all("span")
@@ -146,8 +162,12 @@ def parse_players_transfers(player):
     match = re.match(".+Market value: ([^ ]+) .+", str(desc))
     value = ""
     if match: value = match.group(1)
-    table = pageSoup.find("div",{"class": "responsive-table"}).tbody
-    rows = table.find_all("tr",{"class":"zeile-transfer"})
+    res["value"] = value
     
-    return list(filter(None,map(parse_row, rows))), value
+    table = pageSoup.find("div",{"data-viewport": "Transferhistorie"})
+    rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
+    row = rows[0]    
+    res["transfers"] = list(filter(None,map(transfers_parser, rows)))
+    return res
+
 
