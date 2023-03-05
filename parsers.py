@@ -145,13 +145,11 @@ def transfers_parser(row):
 
 
 def player_profile_parser(player):
-    player = "/tomas-vaclik/profil/spieler/64000"
-    player = "/yusuf-yazici/profil/spieler/386726"
-    player = "/artem-ntumba-muamba/profil/spieler/558688"
     pageSoup = tools.get_soup(player)    
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
     tds = items.div.find_all("span")
     res = {}
+    res["link"] = player
     res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
     res["name_orig"] = tds[1].text
     res["date_of_birth"] = tds[3].text.strip()
@@ -173,6 +171,5 @@ def player_profile_parser(player):
     
     table = pageSoup.find("div",{"data-viewport": "Transferhistorie"})
     rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
-    row = rows[0]    
     res["transfers"] = list(filter(None,map(transfers_parser, rows)))
     return res
