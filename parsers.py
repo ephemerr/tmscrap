@@ -152,8 +152,10 @@ def player_profile_parser(player):
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
     tds = items.div.find_all("span")
     res = {}
-    res["name"] = tds[1].text
+    res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
+    res["name_orig"] = tds[1].text
     res["date_of_birth"] = tds[3].text
+    res["year_of_birth"] = tds[3].text.strip()[-4:]
     res['age'] = tds[8].text
     res['height'] = tds[10].text
     res['citizenship'] = tds[12].img["title"]
