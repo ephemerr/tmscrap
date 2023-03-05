@@ -154,8 +154,8 @@ def player_profile_parser(player):
     res = {}
     res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
     res["name_orig"] = tds[1].text
-    res["date_of_birth"] = tds[3].text
-    res["year_of_birth"] = tds[3].text.strip()[-4:]
+    res["date_of_birth"] = tds[3].text.strip()
+    res["year_of_birth"] = res["date_of_birth"][-4:]
     res['age'] = tds[8].text
     res['height'] = tds[10].text
     res['citizenship'] = tds[12].img["title"]
@@ -176,5 +176,3 @@ def player_profile_parser(player):
     row = rows[0]    
     res["transfers"] = list(filter(None,map(transfers_parser, rows)))
     return res
-
-
