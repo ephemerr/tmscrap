@@ -152,12 +152,17 @@ def player_profile_parser(player):
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
     tds = items.div.find_all("span")
     res = {}
+    res["name"] = tds[1].text
+    res["date_of_birth"] = tds[3].text
     res['age'] = tds[8].text
     res['height'] = tds[10].text
     res['citizenship'] = tds[12].img["title"]
-    res['position'] = tds[14].text
+    res['position'] = tds[14].text.strip()
     res['foot'] = tds[16].text
-
+    res["club"] = tds[18].text.strip()
+    res["joined"] = tds[20].text.strip()
+    res["contract_untill"] = tds[22].text.strip()
+    
     desc = pageSoup.find("meta", {"name":"description"})
     match = re.match(".+Market value: ([^ ]+) .+", str(desc))
     value = ""
