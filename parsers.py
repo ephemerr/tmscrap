@@ -142,7 +142,12 @@ def transfers_parser(row):
     res['market_value'] = cells[4].text
     res['fee'] = cells[5].text
     return {k: v.strip() for k, v in res.items()}
-
+    
+def find_indices(lst, value):
+   indices = [i for i, elem in enumerate(lst) if value in elem.text]
+   if len(indices):
+       return lst[indices[0]+1]
+   return None   
 
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)    
@@ -151,17 +156,17 @@ def player_profile_parser(player):
     res = {}
     res["link"] = player
     res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
-    res["name_orig"] = tds[1].text
-    res["date_of_birth"] = tds[3].text.strip()
+    res["name_orig"] = find_indices(tds,"Name in home country:").text
+    res["date_of_birth"] = find_indices(tds,"Date of birth:").text.strip()
     res["year_of_birth"] = res["date_of_birth"][-4:]
-    res['age'] = tds[8].text
-    res['height'] = tds[10].text
-    res['citizenship'] = tds[12].img["title"]
-    res['position'] = tds[14].text.strip()
-    res['foot'] = tds[16].text
-    res["club"] = tds[18].text.strip()
-    res["joined"] = tds[20].text.strip()
-    res["contract_untill"] = tds[22].text.strip()
+    res['age'] = find_indices(tds,"Age:").text
+    res['height'] = find_indices(tds,"Height:").text
+    res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
+    res['position'] = find_indices(tds,"Position:").text.strip()
+    res['foot'] = find_indices(tds,"Foot:").text    
+    res["club"] = find_indices(tds,"Current club:").text.strip()
+    res["joined"] = find_indices(tds,"Joined:").text.strip()
+    res["contract_untill"] = find_indices(tds,"Contract expires:").text.strip()
     
     desc = pageSoup.find("meta", {"name":"description"})
     match = re.match(".+Market value: ([^ ]+) .+", str(desc))
