@@ -156,6 +156,7 @@ def player_profile_parser(player):
     res = {}
     res["link"] = player
     res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
+    res["photo"] = pageSoup.find("img",{"title": res["name"]})["src"]
     res["name_orig"] = find_indices(tds,"Name in home country:").text
     res["date_of_birth"] = find_indices(tds,"Date of birth:").text.strip()
     res["year_of_birth"] = res["date_of_birth"][-4:]
