@@ -64,7 +64,7 @@ dict_seasons = { '80/81' : 1980,
 def sleep_pause():
     time.sleep(random.uniform(.3,1))
 
-def get_soup(url_):
+def get_soup(url_, prefix="https://www.transfermarkt.com"):
     """Makes an http request and returns the html as BeautifulSoup."""
 
     headers = {'User-Agent': (
@@ -72,7 +72,7 @@ def get_soup(url_):
         'like Gecko) Chrome/51.0.2704.103 Safari/537.36'
     )}
 
-    url = "https://www.transfermarkt.com" + url_
+    url = prefix + url_
     try:
         response = requests.get(url, headers=headers)
     except requests.exceptions.RequestException as e:
@@ -97,11 +97,11 @@ def date_fix(date_raw):
     else:
         warnings.warn(f"Can't parse date: '{date_raw}'")
         return ""
-    
+
 def json_to_csv(file_name):
     with open(f"{file_name}.json") as data_file:
         data = json.load(data_file)
     df = pd.json_normalize(data)
     df.reset_index().to_csv(f"{file_name}.csv")
-    
+
 
