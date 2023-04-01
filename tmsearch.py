@@ -6,6 +6,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
+
+age = 18
+name = "Pinyaev"
+
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
@@ -24,11 +28,22 @@ driver.find_element(By.XPATH,'//button[@title="ACCEPT ALL"]').click()
 
 last_name = driver.find_element(By.CSS_SELECTOR, "#Detailsuche_name")
 ActionChains(driver).scroll_to_element(last_name).perform()
-last_name.send_keys("Pinyaev")
 
-submit_search = driver.find_element(By.CSS_SELECTOR, "input.button[value='Submit search']")
+last_name.send_keys(name)
+
+minAlter = driver.find_element(By.XPATH,'//input[@id="minAlter"]')
+maxAlter = driver.find_element(By.XPATH,'//input[@id="maxAlter"]')
+
+amountAlter = driver.find_element(By.XPATH,'//input[@id="amountAlter"]')
+ActionChains(driver).scroll_to_element(amountAlter).perform()
+
+driver.execute_script("arguments[0].setAttribute('value',arguments[1])",minAlter, age)
+driver.execute_script("arguments[0].setAttribute('value',arguments[1])",maxAlter, age)
+
+# driver.find_element(By.CSS_SELECTOR, "input.button[value='Submit search']").click()
 
 !rm tm_screenshot.png
 driver.save_screenshot("tm_screenshot.png")
 !op tm_screenshot.png
+
 
