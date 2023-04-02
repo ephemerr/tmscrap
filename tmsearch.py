@@ -20,6 +20,7 @@ def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
         driver.get(detailsuche)
         if driver.title != "Error | Transfermarkt":
             break;
+        time.wait(2);
 
     html = driver.find_element(By.CSS_SELECTOR, "html")
 
@@ -59,7 +60,6 @@ def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
         break
 
     return  profile_link
-
 
 # !rm tm_screenshot.png
 # driver.save_screenshot("tm_screenshot.png")
