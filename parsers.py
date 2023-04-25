@@ -85,7 +85,7 @@ def team_kader_parser(row):
     res['name'] = tds[3].a.text.strip()
     res['link'] = tds[3].a['href']
     res['age'] = tds[5].text[-3:-1]
-    res['country'] = tds[6].contents[0]["title"] 
+    res['country'] = tds[6].contents[0]["title"]
     res['height'] = tds[7].text
     res['foot'] = tds[8].text
     res['joined'] = tds[9].text[-4:]
@@ -142,15 +142,15 @@ def transfers_parser(row):
     res['market_value'] = cells[4].text
     res['fee'] = cells[5].text
     return {k: v.strip() for k, v in res.items()}
-    
+
 def find_indices(lst, value):
    indices = [i for i, elem in enumerate(lst) if value in elem.text]
    if len(indices):
        return lst[indices[0]+1]
-   return None   
+   return None
 
 def player_profile_parser(player):
-    pageSoup = tools.get_soup(player)    
+    pageSoup = tools.get_soup(player)
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
     tds = items.div.find_all("span")
     res = {}
@@ -164,17 +164,17 @@ def player_profile_parser(player):
     res['height'] = find_indices(tds,"Height:").text
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
     res['position'] = find_indices(tds,"Position:").text.strip()
-    res['foot'] = find_indices(tds,"Foot:").text    
+    res['foot'] = find_indices(tds,"Foot:").text
     res["club"] = find_indices(tds,"Current club:").text.strip()
     res["joined"] = find_indices(tds,"Joined:").text.strip()
     res["contract_untill"] = find_indices(tds,"Contract expires:").text.strip()
-    
+
     desc = pageSoup.find("meta", {"name":"description"})
     match = re.match(".+Market value: ([^ ]+) .+", str(desc))
     value = ""
     if match: value = match.group(1)
     res["value"] = value
-    
+
     table = pageSoup.find("div",{"data-viewport": "Transferhistorie"})
     rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
     res["transfers"] = list(filter(None,map(transfers_parser, rows)))

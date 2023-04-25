@@ -6,11 +6,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
+import time
+import random
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
+driver = webdriver.Chrome(options=chrome_options)
+
 def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
-    driver = webdriver.Chrome(options=chrome_options)
 
     detailsuche = "https://www.transfermarkt.com/detailsuche/spielerdetail/suche"
 
@@ -20,7 +24,7 @@ def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
         driver.get(detailsuche)
         if driver.title != "Error | Transfermarkt":
             break;
-        time.wait(2);
+        time.sleep(random.uniform(.3,1))
 
     html = driver.find_element(By.CSS_SELECTOR, "html")
 
@@ -55,8 +59,9 @@ def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
                 print("Search results are empty")
                 break;
             print("Search results not obtained")
-            time.wait(2);
             html.send_keys(Keys.COMMAND + r)
+            time.sleep(random.uniform(.3,1))
+            continue
         break
 
     return  profile_link
@@ -69,4 +74,4 @@ def get_tm_profile_by_name_and_age(surname, age, num_of_tries=3):
 
 # html.send_keys(Keys.PAGE_UP)
 
-get_tm_profile_by_name_and_age("Kozlovi",22)
+res = get_tm_profile_by_name_and_age("Kozlov",22)

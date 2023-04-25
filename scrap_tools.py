@@ -64,7 +64,7 @@ dict_seasons = { '80/81' : 1980,
 def sleep_pause():
     time.sleep(random.uniform(.3,1))
 
-def get_soup(url_, prefix="https://www.transfermarkt.com"):
+def get_soup(url, prefix="https://www.transfermarkt.com"):
     """Makes an http request and returns the html as BeautifulSoup."""
 
     headers = {'User-Agent': (
@@ -72,7 +72,8 @@ def get_soup(url_, prefix="https://www.transfermarkt.com"):
         'like Gecko) Chrome/51.0.2704.103 Safari/537.36'
     )}
 
-    url = prefix + url_
+    if prefix not in url:
+        url = prefix + url
     try:
         response = requests.get(url, headers=headers)
     except requests.exceptions.RequestException as e:

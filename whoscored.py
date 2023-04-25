@@ -7,13 +7,14 @@ from bs4 import BeautifulSoup
 import time
 import random
 
+import tmsearch
+import parsers
+
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
 driver = webdriver.Chrome(options=chrome_options)
 num_of_tries = 3
-
-address = "https://www.whoscored.com/Matches/1647777/LiveStatistics/%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F-%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D1%8F-1-2022-2023-%D0%93%D0%B0%D0%B7%D0%BE%D0%B2%D0%B8%D0%BA-%D0%9E%D1%80%D0%B5%D0%BD%D0%B1%D1%83%D1%80%D0%B3%D1%81%D0%BA%D0%B0%D1%8F-%D0%A1%D0%BF%D0%B0%D1%80%D1%82%D0%B0%D0%BA"
 
 def parse_match(address):
     res = []
@@ -24,8 +25,12 @@ def parse_match(address):
     except:
         print(f"Failed to load page: {address}")
         return res
-    soup = BeautifulSoup(driver.page_source)
-    trs = soup.select_one("#live-player-stats").find_all("tr")
+    try:
+        soup = BeautifulSoup(driver.page_source)
+        trs = soup.select_one("#live-player-stats").find_all("tr")
+    except:
+        print(f"Failed to find player stats: {address}")
+        return res
     if len(trs) < 30:
         print(f'Number of player stats: {len(trs)}')
         return res
@@ -54,6 +59,8 @@ def parse_month(address):
     rows = soup.select("a.match-link")
     for row in reversed(rows):
         link = "https://whoscored.com" + row['href'].replace("MatchReport", "LiveStatistics")
+        if "Preview" in link:
+            continue
         for i in range(0, num_of_tries):
             match_stats = parse_match(link)
             if len(match_stats):
@@ -74,6 +81,19 @@ week_stats = sorted(parse_month(address), key=lambda d: d['rating'], reverse=Tru
 
 filed_week_stats = [d for d in week_stats if d.get('age') <= 23 and d.get('position') != "GK"]
 gk_week_stats = [d for d in week_stats if d.get('age') <= 25 and d.get('position') == "GK"]
-filed_week_stats[0:10]
 gk_week_stats[0]
+
+filed_week_stats[0:10]
+
+# def tm_enrich(players_list):
+prefix="https://www.transfermarkt.com"
+for player in filed_week_stats[0:10]:
+    print(player["name"])
+    try:
+        profile_link = tmsearch.get_tm_profile_by_name_and_age(player["name"].split()[-1], player["age"])
+        profile_stats = parsers.player_profile_parser(profile_link.removeprefix(prefix))
+        player["photo"] = profile_stats["photo"].replace("big","home3")
+        player["tm_position"] = profile_stats["position"].split()[0]
+    except:
+        print("failed")
 
