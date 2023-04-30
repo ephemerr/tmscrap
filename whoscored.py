@@ -9,6 +9,7 @@ import random
 
 import tmsearch
 import parsers
+from tmsearch import TmSearchDriver
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -87,13 +88,14 @@ filed_week_stats[0:10]
 
 # def tm_enrich(players_list):
 prefix="https://www.transfermarkt.com"
+tm_searcher  = TmSearchDriver()
 for player in filed_week_stats[0:10]:
     print(player["name"])
     try:
-        profile_link = tmsearch.get_tm_profile_by_name_and_age(player["name"].split()[-1], player["age"])
+        profile_link = tm_searcher.search(player["name"].split()[-1], player["age"])
         profile_stats = parsers.player_profile_parser(profile_link.removeprefix(prefix))
         player["photo"] = profile_stats["photo"].replace("big","home3")
         player["tm_position"] = profile_stats["position"].split()[0]
-    except:
-        print("failed")
+    except Exception as e:
+        print(e.message, e.__traceback__, e.__cause__, e.__context__, e.__notes__)
 
