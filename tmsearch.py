@@ -15,9 +15,10 @@ class TmSearchDriver:
         self.chrome_options = Options()
         self.chrome_options.add_argument("--headless")
         self.chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
+        self.driver = webdriver.Chrome(options=self.chrome_options)
 
     def search(self, surname, age, num_of_tries=3):
-        driver = webdriver.Chrome(options=self.chrome_options)
+        driver = self.driver
 
         detailsuche = "https://www.transfermarkt.com/detailsuche/spielerdetail/suche"
 

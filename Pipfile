@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-bs4 = "*"
-selenium = "*"
 pandas = "*"
+selenium = "*"
+bs4 = "*"
 
 [dev-packages]
 neovim-remote = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.9"
+python_full_version = "3.9.16"
