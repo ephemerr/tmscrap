@@ -149,6 +149,8 @@ def find_indices(lst, value):
        return lst[indices[0]+1]
    return None
 
+player= "https://www.transfermarkt.com/brandon-cortes/profil/spieler/663994"
+
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
@@ -161,7 +163,7 @@ def player_profile_parser(player):
         res["name_orig"] = find_indices(tds,"Name in home country:").text
     except:
         res["name_orig"] = res["name"]
-    res["date_of_birth"] = find_indices(tds,"Date of birth:").text.strip()
+    res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()
     res["year_of_birth"] = res["date_of_birth"][-4:]
     res['age'] = find_indices(tds,"Age:").text
     res['height'] = find_indices(tds,"Height:").text
@@ -179,6 +181,7 @@ def player_profile_parser(player):
     res["value"] = value
 
     table = pageSoup.find("div",{"data-viewport": "Transferhistorie"})
-    rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
-    res["transfers"] = list(filter(None,map(transfers_parser, rows)))
+    if table:
+        rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
+        res["transfers"] = list(filter(None,map(transfers_parser, rows)))
     return res
