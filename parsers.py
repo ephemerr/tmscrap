@@ -163,8 +163,8 @@ def player_profile_parser(player):
         res["name_orig"] = find_indices(tds,"Name in home country:").text
     except:
         res["name_orig"] = res["name"]
-    res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()
-    res["year_of_birth"] = res["date_of_birth"][-9:-5]
+    res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()[:-5]
+    res["year_of_birth"] = res["date_of_birth"][-4:]
     res['age'] = find_indices(tds,"Age:").text
     res['height'] = find_indices(tds,"Height:").text
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
