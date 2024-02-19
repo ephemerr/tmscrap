@@ -149,7 +149,7 @@ def find_indices(lst, value):
        return lst[indices[0]+1]
    return None
 
-player= "https://www.transfermarkt.com/brandon-cortes/profil/spieler/663994"
+player= "https://www.transfermarkt.com/camiel-neghli/profil/spieler/587588"
 
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)
@@ -157,7 +157,9 @@ def player_profile_parser(player):
     tds = items.div.find_all("span")
     res = {}
     res["link"] = player
-    res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()[3:].strip()
+    res["name"] = pageSoup.find("h1",{"class": "data-header__headline-wrapper"}).text.strip()
+    if "#" in res["name"]:
+        res["name"] = res["name"][3:].strip()
     res["photo"] = pageSoup.find("img",{"title": res["name"]})["src"]
     try:
         res["name_orig"] = find_indices(tds,"Name in home country:").text
