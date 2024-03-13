@@ -170,6 +170,7 @@ def player_profile_parser(player):
     res['age'] = find_indices(tds,"Age:").text
     res['height'] = find_indices(tds,"Height:").text
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
+    res['flag'] = find_indices(tds,"Citizenship:").img["src"]
     res['position'] = find_indices(tds,"Position:").text.strip()
     res['foot'] = find_indices(tds,"Foot:").text if find_indices(tds,"Foot:") else "" 
     res["club"] = find_indices(tds,"Current club:").text.strip()
@@ -187,3 +188,4 @@ def player_profile_parser(player):
         rows = table.find_all("div",{"class":"grid tm-player-transfer-history-grid"})
         res["transfers"] = list(filter(None,map(transfers_parser, rows)))
     return res
+
