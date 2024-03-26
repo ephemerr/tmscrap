@@ -149,7 +149,7 @@ def find_indices(lst, value):
        return lst[indices[0]+1]
    return None
 
-player= "https://www.transfermarkt.com/raul-paula/profil/spieler/716756"
+player= "https://www.transfermarkt.com/arney-rocha/profil/spieler/1016106"
 
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)
@@ -168,7 +168,7 @@ def player_profile_parser(player):
     res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()[:-5]
     res["year_of_birth"] = res["date_of_birth"][-4:]
     res['age'] = find_indices(tds,"Age:").text
-    res['height'] = find_indices(tds,"Height:").text
+    res['height'] = find_indices(tds,"Height:").text if find_indices(tds,"Height:") else "" 
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
     res['flag'] = find_indices(tds,"Citizenship:").img["src"]
     res['position'] = find_indices(tds,"Position:").text.strip()
