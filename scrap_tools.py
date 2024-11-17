@@ -19,7 +19,7 @@ dict_seasons = { '80/81' : 1980,
                  '81/82' : 1981,
                  '82/83' : 1982,
                  '83/84' : 1983,
-                 '84/85' : 1984,
+                 '84/85' : 1984,    
                  '85/86' : 1985,
                  '86/87' : 1986,
                  '87/88' : 1987,
@@ -92,7 +92,7 @@ def date_fix(date_raw):
         return "22/23", "Jun 30, 2022" #FIXME
     if date_raw in dict_seasons:
         return date_raw,"Jan 1, " + str(dict_seasons[date_raw])
-    match = re.search('(.*) \((.*)\)', date_raw)
+    match = re.search(r'(.*) \((.*)\)', date_raw)
     if match:
         return match.group(1),match.group(2)
     else:

@@ -149,11 +149,11 @@ def find_indices(lst, value):
        return lst[indices[0]+1]
    return None
 
-player= "https://www.transfermarkt.com/arney-rocha/profil/spieler/1016106"
+player= "https://www.transfermarkt.com/joao-batxi/profil/spieler/514256"
 
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)
-    items = pageSoup.find("div", {"class": "large-6 large-pull-6 small-12 columns spielerdatenundfakten"})
+    items = pageSoup.find("div", {"class": "large-6 large-pull-6 columns print spielerdatenundfakten"})
     tds = items.div.find_all("span")
     res = {}
     res["link"] = player
