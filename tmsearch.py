@@ -16,20 +16,6 @@ class TmSearchDriver:
         self.chrome_options.add_argument("--headless")
         self.chrome_options.add_argument("user-agent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'")
         self.driver = webdriver.Chrome(options=self.chrome_options)
-    
-    def get_html(self, link):
-        driver = self.driver
-        player_stats = player.replace("prifil", "leistungsdaten")
-        driver.implicitly_wait(5)   
-        for i in range(0,num_of_tries):
-            driver.get(link)
-            if driver.title != "Error | Transfermarkt":
-                break;
-            time.sleep(random.uniform(.3,1))
-        return driver.find_element(By.CSS_SELECTOR, "html")    
-        
-    def get_element(self, xpath):
-        
 
     def search(self, surname, age, num_of_tries=3):
         driver = self.driver
