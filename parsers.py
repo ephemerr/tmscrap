@@ -173,7 +173,7 @@ def player_profile_parser(player):
     res['height'] = find_indices(tds,"Height:").text if find_indices(tds,"Height:") else "" 
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
     res['flag'] = find_indices(tds,"Citizenship:").img["src"]
-    res['position'] = find_indices(tds,"Position:").text.strip()
+    res['position'] = find_indices(tds,"Position:").text.strip().split(" - ")[1]
     res['foot'] = find_indices(tds,"Foot:").text if find_indices(tds,"Foot:") else "" 
     res["club"] = find_indices(tds,"Current club:").text.strip()
     res["joined"] = find_indices(tds,"Joined:").text.strip()
