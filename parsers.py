@@ -151,6 +151,8 @@ def find_indices(lst, value):
 
 player= "https://www.transfermarkt.com/joao-batxi/profil/spieler/514256"
 
+player_stats = player.replace("prifil", "leistungsdaten")
+
 def player_profile_parser(player):
     pageSoup = tools.get_soup(player)
     items = pageSoup.find("div", {"class": "large-6 large-pull-6 columns print spielerdatenundfakten"})
@@ -167,7 +169,7 @@ def player_profile_parser(player):
         res["name_orig"] = res["name"]
     res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()[:-5]
     res["year_of_birth"] = res["date_of_birth"][-4:]
-    res['age'] = find_indices(tds,"Age:").text
+    res['age'] = find_indices(tds,"Age:").text.strip()[-3:-1]
     res['height'] = find_indices(tds,"Height:").text if find_indices(tds,"Height:") else "" 
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
     res['flag'] = find_indices(tds,"Citizenship:").img["src"]
@@ -180,7 +182,8 @@ def player_profile_parser(player):
     desc = pageSoup.find("meta", {"name":"description"})
     match = re.match(".+Market value: ([^ ]+) .+", str(desc))
     value = ""
-    if match: value = match.group(1)
+    if match: 
+        value = match.group(1)
     res["value"] = value
 
     table = pageSoup.find("div",{"data-viewport": "Transferhistorie"})
@@ -189,3 +192,4 @@ def player_profile_parser(player):
         res["transfers"] = list(filter(None,map(transfers_parser, rows)))
     return res
 
+player_profile_parser(player)
