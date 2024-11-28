@@ -149,7 +149,7 @@ def find_indices(lst, value):
        return lst[indices[0]+1]
    return None
 
-player= "https://www.transfermarkt.com/joao-batxi/profil/spieler/514256"
+player= "https://www.transfermarkt.com/roman-pasevich/profil/spieler/731129"
 
 player_stats = player.replace("prifil", "leistungsdaten")
 
@@ -167,8 +167,8 @@ def player_profile_parser(player):
         res["name_orig"] = find_indices(tds,"Name in home country:").text
     except:
         res["name_orig"] = res["name"]
-    res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip()[:-5]
-    res["year_of_birth"] = res["date_of_birth"][-4:]
+    res["date_of_birth"] = find_indices(tds,"Date of birth").text.strip().split("(")[0]
+    res["year_of_birth"] = res["date_of_birth"][-5:]
     res['age'] = find_indices(tds,"Age:").text.strip()[-3:-1]
     res['height'] = find_indices(tds,"Height:").text if find_indices(tds,"Height:") else "" 
     res['citizenship'] = find_indices(tds,"Citizenship:").img["title"]
